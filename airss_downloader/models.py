@@ -65,3 +65,46 @@ class Sources(Base):
         self.published_date = published_date
         self.updated_date = updated_date
         self.url = url
+
+
+class Contents(Base):
+    """
+    Class to define the general content model.
+    """
+    __tablename__ = 'contents'
+    id = Column(Integer, primary_key=True, doc='Content ID')
+    title = Column(String)
+    created_date = Column(
+        DateTime,
+        nullable=False,
+        doc='Date of introduction to the database.'
+    )
+    published_date = Column(
+        DateTime,
+        nullable=False,
+        doc='Date of publication.'
+    )
+    updated_date = Column(
+        DateTime,
+        doc='Date of the last database entry update.'
+    )
+    url = Column(String)
+    author_id = Column(Integer)
+
+    def __init__(
+        self,
+        id,
+        title,
+        created_date,
+        published_date,
+        updated_date,
+        url,
+        author_id,
+    ):
+        self.id = id
+        self.title = title
+        self.created_date = created_date
+        self.published_date = published_date
+        self.updated_date = updated_date
+        self.url = url
+        self.author_id = author_id

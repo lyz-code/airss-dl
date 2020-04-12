@@ -1,5 +1,8 @@
-from airss_downloader.models import Sources
+from airss_downloader.models import \
+    Contents, \
+    Sources
 from tests.factories import \
+    ContentsFactory, \
     SourcesFactory
 
 import pytest
@@ -52,4 +55,31 @@ class TestSources(BaseModelTest):
             'published_date',
             'updated_date',
             'url',
+        ]
+
+
+@pytest.mark.usefixtures('base_setup')
+class TestContents(BaseModelTest):
+
+    @pytest.fixture(autouse=True)
+    def setup(self, session):
+        self.factory = ContentsFactory
+        self.dummy_instance = ContentsFactory.create()
+        self.model = Contents(
+            id=self.dummy_instance.id,
+            title=self.dummy_instance.title,
+            created_date=self.dummy_instance.created_date,
+            published_date=self.dummy_instance.published_date,
+            updated_date=self.dummy_instance.updated_date,
+            url=self.dummy_instance.url,
+            author_id=self.dummy_instance.author_id,
+        )
+        self.model_attributes = [
+            'id',
+            'title',
+            'created_date',
+            'published_date',
+            'updated_date',
+            'url',
+            'author_id',
         ]

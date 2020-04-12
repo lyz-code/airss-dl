@@ -13,6 +13,7 @@ os.environ['AIRSS_DATABASE_URL'] = 'sqlite:///{}'.format(temp_ddbb)
 # It needs to be after the environmental variable
 from airss_downloader.models import engine
 from tests.factories import \
+    ContentsFactory, \
     SourcesFactory
 
 
@@ -48,6 +49,7 @@ def session(connection):
     transaction = connection.begin()
     session = sessionmaker()(bind=connection)
 
+    ContentsFactory._meta.sqlalchemy_session = session
     SourcesFactory._meta.sqlalchemy_session = session
 
     yield session
