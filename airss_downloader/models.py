@@ -5,8 +5,14 @@ Classes:
     Author: Class to define the author model.
     Category: Class to define the category model.
     Tag: Class to define the tag model.
+
     Content: Class to define the content model.
+    Article: Class to expand the Content class with article specific
+        attributes.
+
     Source: Class to define the source model.
+    RssArticleSource: Class to expand the Source class with rss article
+        specific attributes.
 """
 
 import os
@@ -224,10 +230,24 @@ class Content(Base):
 
 
 class Article(Content):
+    """
+    Class to expand the Content class with article specific attributes.
+
+    Public attributes:
+        summary (str):
+        body (str):
+        image_path(str):
+        source_id(str):
+
+    Relations:
+        source(Source): Source related object.
+    """
+
     __tablename__ = 'article'
     id = Column(String, ForeignKey('content.id'), primary_key=True)
     summary = Column(String)
     image_path = Column(String)
+    body = Column(String)
     id_source = Column(String)
 
     __mapper_args__ = {
@@ -283,6 +303,7 @@ class Source(Base):
         url (str):
         aggregated_certainty (float):
         aggregated_score (float):
+        type(str): Content type discriminator.
 
     Relations:
         categories(list): List of Category related objects.
@@ -320,6 +341,12 @@ class Source(Base):
         back_populates='sources',
         secondary=source_has_tag,
     )
+    type = Column(Integer, doc='Content type discriminator')
+
+    __mapper_args__ = {
+        'polymorphic_identity': 'source',
+        'polymorphic_on': type
+    }
 
     def __init__(
         self,
@@ -342,3 +369,49 @@ class Source(Base):
         self.url = url
         self.aggregated_score = aggregated_score
         self.aggregated_certainty = aggregated_certainty
+
+
+class RssArticleSource(Source):
+    """
+    Class to expand the Source class with rss article specific attributes.
+
+    Public attributes:
+        image_path(str):
+
+    Relations:
+        articles(list): List of Article related objects.
+    """
+
+    __tablename__ = 'rss_article_source'
+    id = Column(String, ForeignKey('source.id'), primary_key=True)
+    image_path = Column(String)
+
+    __mapper_args__ = {
+        'polymorphic_identity': 'rss_article_source',
+    }
+
+    def __init__(
+        self,
+        id,
+        title,
+        created_date,
+        published_date,
+        updated_date,
+        url,
+        image_path=None,
+        description=None,
+        aggregated_score=None,
+        aggregated_certainty=None,
+    ):
+        super().__init__(
+            id,
+            title,
+            created_date,
+            published_date,
+            updated_date,
+            url,
+            description=None,
+            aggregated_score=None,
+            aggregated_certainty=None,
+        )
+        self.image_path = image_path

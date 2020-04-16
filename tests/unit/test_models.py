@@ -111,7 +111,7 @@ class TestContent(BaseModelTest):
 
 
 @pytest.mark.usefixtures('base_setup')
-class TestArticle(TestContent):
+class TestArticle(BaseModelTest):
 
     @pytest.fixture(autouse=True)
     def setup(self, session):
@@ -179,4 +179,38 @@ class TestSource(BaseModelTest):
             'url',
             'aggregated_score',
             'aggregated_certainty',
+        ]
+
+
+@pytest.mark.usefixtures('base_setup')
+class TestRssArticleSource(BaseModelTest):
+
+    @pytest.fixture(autouse=True)
+    def setup(self, session):
+        self.factory = factories.RssArticleSourceFactory
+        self.dummy_instance = self.factory.create()
+        self.model = models.RssArticleSource(
+            id=self.dummy_instance.id,
+            title=self.dummy_instance.title,
+            description=self.dummy_instance.description,
+            created_date=self.dummy_instance.created_date,
+            published_date=self.dummy_instance.published_date,
+            updated_date=self.dummy_instance.updated_date,
+            url=self.dummy_instance.url,
+            aggregated_score=self.dummy_instance.aggregated_score,
+            aggregated_certainty=self.dummy_instance.aggregated_certainty,
+            image_path=self.dummy_instance.image_path,
+        )
+
+        self.model_attributes = [
+            'id',
+            'title',
+            'description',
+            'created_date',
+            'published_date',
+            'updated_date',
+            'url',
+            'aggregated_score',
+            'aggregated_certainty',
+            'image_path',
         ]

@@ -53,6 +53,7 @@ def session(connection):
     factories.TagFactory._meta.sqlalchemy_session = session
     factories.ContentFactory._meta.sqlalchemy_session = session
     factories.SourceFactory._meta.sqlalchemy_session = session
+    factories.RssArticleSourceFactory._meta.sqlalchemy_session = session
 
     yield session
 

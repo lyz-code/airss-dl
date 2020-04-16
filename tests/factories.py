@@ -60,6 +60,17 @@ class SourceFactory(factory.alchemy.SQLAlchemyModelFactory):
         sqlalchemy_session_persistence = 'commit'
 
 
+class RssArticleSourceFactory(SourceFactory):
+    """
+    Class to generate a fake rss article source element.
+    """
+    image_path = factory.Faker('file_path')
+
+    class Meta:
+        model = models.RssArticleSource
+        sqlalchemy_session_persistence = 'commit'
+
+
 class ContentFactory(factory.alchemy.SQLAlchemyModelFactory):
     """
     Class to generate a fake content element.
