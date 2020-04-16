@@ -45,6 +45,40 @@ class TestAuthor(BaseModelTest):
 
 
 @pytest.mark.usefixtures('base_setup')
+class TestCategory(BaseModelTest):
+
+    @pytest.fixture(autouse=True)
+    def setup(self, session):
+        self.factory = factories.CategoryFactory
+        self.dummy_instance = self.factory.create()
+        self.model = models.Category(
+            id=self.dummy_instance.id,
+            name=self.dummy_instance.name,
+        )
+        self.model_attributes = [
+            'id',
+            'name',
+        ]
+
+
+@pytest.mark.usefixtures('base_setup')
+class TestTag(BaseModelTest):
+
+    @pytest.fixture(autouse=True)
+    def setup(self, session):
+        self.factory = factories.TagFactory
+        self.dummy_instance = self.factory.create()
+        self.model = models.Tag(
+            id=self.dummy_instance.id,
+            name=self.dummy_instance.name,
+        )
+        self.model_attributes = [
+            'id',
+            'name',
+        ]
+
+
+@pytest.mark.usefixtures('base_setup')
 class TestContent(BaseModelTest):
 
     @pytest.fixture(autouse=True)

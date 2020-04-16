@@ -48,6 +48,8 @@ def session(connection):
     session = sessionmaker()(bind=connection)
 
     factories.AuthorFactory._meta.sqlalchemy_session = session
+    factories.CategoryFactory._meta.sqlalchemy_session = session
+    factories.TagFactory._meta.sqlalchemy_session = session
     factories.ContentFactory._meta.sqlalchemy_session = session
     factories.SourceFactory._meta.sqlalchemy_session = session
 

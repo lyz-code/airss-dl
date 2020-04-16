@@ -2,8 +2,11 @@
 Module to store the models.
 
 Classes:
-    RssChannel: RSS channel model.
-    RssEntries: RSS channel model.
+    Author: Class to define the author model.
+    Category: Class to define the category model.
+    Tag: Class to define the tag model.
+    Content: Class to define the content model.
+    Source: Class to define the source model.
 """
 
 import os
@@ -15,7 +18,8 @@ from sqlalchemy import \
     Float, \
     ForeignKey, \
     Integer, \
-    String
+    String, \
+    Table
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
 
@@ -26,10 +30,21 @@ engine = create_engine(
 
 Base = declarative_base(bind=engine)
 
+# Association tables
+
+source_has_category = Table(
+    'source_has_category',
+    Base.metadata,
+    Column('source_id', String, ForeignKey('source.id')),
+    Column('category_id', String, ForeignKey('category.id'))
+)
+
+# Tables
+
 
 class Author(Base):
     """
-    Class to define the general content model.
+    Class to define the author model.
 
     Public attributes:
         id (str): Author id.
@@ -45,9 +60,47 @@ class Author(Base):
     contents = relationship('Content', back_populates='author')
 
 
+class Category(Base):
+    """
+    Class to define the category model.
+
+    Public attributes:
+        id (str): Category id.
+        name (str): Category name.
+
+    Relations:
+        contents(list): List of Content related objects.
+    """
+
+    __tablename__ = 'category'
+    id = Column(String, primary_key=True)
+    name = Column(String)
+    contents = relationship(
+        'Content',
+        back_populates='categories',
+        secondary=source_has_category,
+    )
+
+
+class Tag(Base):
+    """
+    Class to define the tag model.
+
+    Public attributes:
+        id (str): Tag id.
+        name (str): Tag name.
+
+    Relations:
+    """
+
+    __tablename__ = 'tag'
+    id = Column(String, primary_key=True)
+    name = Column(String)
+
+
 class Content(Base):
     """
-    Class to define the general content model.
+    Class to define the content model.
 
     Public attributes:
         id (int): Content id.
@@ -64,6 +117,7 @@ class Content(Base):
 
     Relations:
         author(Author): Author related objects.
+        categories(list): List of Category related objects.
     """
 
     __tablename__ = 'content'
@@ -85,10 +139,15 @@ class Content(Base):
     )
     url = Column(String)
     author_id = Column(String, ForeignKey(Author.id))
-    author = relationship(Author, back_populates='contents')
+    author = relationship('Author', back_populates='contents')
     score = Column(Integer, doc='User content score')
     predicted_score = Column(Float)
     predicted_certainty = Column(Float)
+    categories = relationship(
+        'Category',
+        back_populates='contents',
+        secondary=source_has_category,
+    )
 
     def __init__(
         self,
@@ -117,10 +176,10 @@ class Content(Base):
 
 class Source(Base):
     """
-    Class to define the general sources model.
+    Class to define the sources model.
 
     Public attributes:
-        id (int): Content id.
+        id (str): Content id.
         title (str):
         description (str):
         created_date (Datetime): Date of introduction to the database.
@@ -134,7 +193,7 @@ class Source(Base):
     """
 
     __tablename__ = 'source'
-    id = Column(Integer, primary_key=True, doc='Source ID')
+    id = Column(String, primary_key=True, doc='Source ID')
     title = Column(String)
     description = Column(String)
     created_date = Column(

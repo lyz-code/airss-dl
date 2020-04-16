@@ -17,6 +17,30 @@ class AuthorFactory(factory.alchemy.SQLAlchemyModelFactory):
         sqlalchemy_session_persistence = 'commit'
 
 
+class CategoryFactory(factory.alchemy.SQLAlchemyModelFactory):
+    """
+    Class to generate a fake category element.
+    """
+    id = factory.Faker('word')
+    name = factory.Faker('name')
+
+    class Meta:
+        model = models.Category
+        sqlalchemy_session_persistence = 'commit'
+
+
+class TagFactory(factory.alchemy.SQLAlchemyModelFactory):
+    """
+    Class to generate a fake tag element.
+    """
+    id = factory.Faker('word')
+    name = factory.Faker('name')
+
+    class Meta:
+        model = models.Tag
+        sqlalchemy_session_persistence = 'commit'
+
+
 class SourceFactory(factory.alchemy.SQLAlchemyModelFactory):
     """
     Class to generate a fake source element.
