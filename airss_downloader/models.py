@@ -248,7 +248,8 @@ class Article(Content):
     summary = Column(String)
     image_path = Column(String)
     body = Column(String)
-    id_source = Column(String)
+    source_id = Column(String, ForeignKey('rss_article_source.id'))
+    source = relationship('RssArticleSource', back_populates='articles')
 
     __mapper_args__ = {
         'polymorphic_identity': 'article',
@@ -385,6 +386,7 @@ class RssArticleSource(Source):
     __tablename__ = 'rss_article_source'
     id = Column(String, ForeignKey('source.id'), primary_key=True)
     image_path = Column(String)
+    articles = relationship('Article', back_populates='source')
 
     __mapper_args__ = {
         'polymorphic_identity': 'rss_article_source',
