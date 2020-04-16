@@ -1,9 +1,5 @@
-from airss_downloader.models import \
-    Contents, \
-    Sources
-from tests.factories import \
-    ContentsFactory, \
-    SourcesFactory
+from airss_downloader import models
+from tests import factories
 
 import pytest
 
@@ -32,13 +28,64 @@ class BaseModelTest:
 
 
 @pytest.mark.usefixtures('base_setup')
-class TestSources(BaseModelTest):
+class TestAuthor(BaseModelTest):
 
     @pytest.fixture(autouse=True)
     def setup(self, session):
-        self.factory = SourcesFactory
-        self.dummy_instance = SourcesFactory.create()
-        self.model = Sources(
+        self.factory = factories.AuthorFactory
+        self.dummy_instance = self.factory.create()
+        self.model = models.Author(
+            id=self.dummy_instance.id,
+            name=self.dummy_instance.name,
+        )
+        self.model_attributes = [
+            'id',
+            'name',
+        ]
+
+
+@pytest.mark.usefixtures('base_setup')
+class TestContent(BaseModelTest):
+
+    @pytest.fixture(autouse=True)
+    def setup(self, session):
+        self.factory = factories.ContentFactory
+        self.dummy_instance = self.factory.create()
+        self.model = models.Content(
+            id=self.dummy_instance.id,
+            title=self.dummy_instance.title,
+            created_date=self.dummy_instance.created_date,
+            published_date=self.dummy_instance.published_date,
+            updated_date=self.dummy_instance.updated_date,
+            url=self.dummy_instance.url,
+            author=self.dummy_instance.author,
+            score=self.dummy_instance.score,
+            predicted_score=self.dummy_instance.predicted_score,
+            predicted_certainty=self.dummy_instance.predicted_certainty,
+        )
+
+        self.model_attributes = [
+            'id',
+            'title',
+            'created_date',
+            'published_date',
+            'updated_date',
+            'url',
+            'author',
+            'score',
+            'predicted_score',
+            'predicted_certainty',
+        ]
+
+
+@pytest.mark.usefixtures('base_setup')
+class TestSource(BaseModelTest):
+
+    @pytest.fixture(autouse=True)
+    def setup(self, session):
+        self.factory = factories.SourceFactory
+        self.dummy_instance = self.factory.create()
+        self.model = models.Source(
             id=self.dummy_instance.id,
             title=self.dummy_instance.title,
             description=self.dummy_instance.description,
@@ -46,7 +93,10 @@ class TestSources(BaseModelTest):
             published_date=self.dummy_instance.published_date,
             updated_date=self.dummy_instance.updated_date,
             url=self.dummy_instance.url,
+            aggregated_score=self.dummy_instance.aggregated_score,
+            aggregated_certainty=self.dummy_instance.aggregated_certainty,
         )
+
         self.model_attributes = [
             'id',
             'title',
@@ -55,31 +105,6 @@ class TestSources(BaseModelTest):
             'published_date',
             'updated_date',
             'url',
-        ]
-
-
-@pytest.mark.usefixtures('base_setup')
-class TestContents(BaseModelTest):
-
-    @pytest.fixture(autouse=True)
-    def setup(self, session):
-        self.factory = ContentsFactory
-        self.dummy_instance = ContentsFactory.create()
-        self.model = Contents(
-            id=self.dummy_instance.id,
-            title=self.dummy_instance.title,
-            created_date=self.dummy_instance.created_date,
-            published_date=self.dummy_instance.published_date,
-            updated_date=self.dummy_instance.updated_date,
-            url=self.dummy_instance.url,
-            author_id=self.dummy_instance.author_id,
-        )
-        self.model_attributes = [
-            'id',
-            'title',
-            'created_date',
-            'published_date',
-            'updated_date',
-            'url',
-            'author_id',
+            'aggregated_score',
+            'aggregated_certainty',
         ]

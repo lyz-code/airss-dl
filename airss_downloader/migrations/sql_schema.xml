@@ -83,6 +83,15 @@
 <datatype>INTEGER</datatype>
 <default>NULL</default><relation table="authors" row="id" />
 </row>
+<row name="score" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<row name="predicted_score" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<row name="predicted_certainty" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
 <key type="PRIMARY" name="">
 <part>id</part>
 </key>
@@ -130,7 +139,7 @@
 <part>id</part>
 </key>
 </table>
-<table x="282" y="400" name="sources">
+<table x="243" y="401" name="sources">
 <row name="id" null="1" autoincrement="1">
 <datatype>INTEGER</datatype>
 <default>NULL</default><relation table="source_has_categories" row="source_id" />
@@ -154,6 +163,12 @@
 <default>NULL</default></row>
 <row name="url" null="1" autoincrement="0">
 <datatype>MEDIUMTEXT</datatype>
+<default>NULL</default></row>
+<row name="aggregated_score" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<row name="aggregated_certainty" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
 <default>NULL</default></row>
 <key type="PRIMARY" name="">
 <part>id</part>

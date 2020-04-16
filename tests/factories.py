@@ -1,13 +1,23 @@
-from airss_downloader.models import \
-    Contents, \
-    Sources
+from airss_downloader import models
 
 import factory
 
 # XXX If you add new Factories remember to add the session in conftest.py
 
 
-class SourcesFactory(factory.alchemy.SQLAlchemyModelFactory):
+class AuthorFactory(factory.alchemy.SQLAlchemyModelFactory):
+    """
+    Class to generate a fake author element.
+    """
+    id = factory.Faker('word')
+    name = factory.Faker('name')
+
+    class Meta:
+        model = models.Author
+        sqlalchemy_session_persistence = 'commit'
+
+
+class SourceFactory(factory.alchemy.SQLAlchemyModelFactory):
     """
     Class to generate a fake source element.
     """
@@ -18,13 +28,15 @@ class SourcesFactory(factory.alchemy.SQLAlchemyModelFactory):
     published_date = factory.Faker('date_time')
     updated_date = factory.Faker('date_time')
     url = factory.Faker('url')
+    aggregated_score = factory.Faker('pyfloat')
+    aggregated_certainty = factory.Faker('pyfloat')
 
     class Meta:
-        model = Sources
+        model = models.Source
         sqlalchemy_session_persistence = 'commit'
 
 
-class ContentsFactory(factory.alchemy.SQLAlchemyModelFactory):
+class ContentFactory(factory.alchemy.SQLAlchemyModelFactory):
     """
     Class to generate a fake content element.
     """
@@ -34,8 +46,11 @@ class ContentsFactory(factory.alchemy.SQLAlchemyModelFactory):
     published_date = factory.Faker('date_time')
     updated_date = factory.Faker('date_time')
     url = factory.Faker('url')
-    author_id = factory.Faker('random_number')
+    author = factory.SubFactory(AuthorFactory)
+    score = factory.Faker('random_number')
+    predicted_score = factory.Faker('pyfloat')
+    predicted_certainty = factory.Faker('pyfloat')
 
     class Meta:
-        model = Contents
+        model = models.Content
         sqlalchemy_session_persistence = 'commit'
