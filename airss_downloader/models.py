@@ -39,6 +39,27 @@ source_has_category = Table(
     Column('category_id', String, ForeignKey('category.id'))
 )
 
+content_has_category = Table(
+    'content_has_category',
+    Base.metadata,
+    Column('content_id', String, ForeignKey('content.id')),
+    Column('category_id', String, ForeignKey('category.id'))
+)
+
+source_has_tag = Table(
+    'source_has_tag',
+    Base.metadata,
+    Column('source_id', String, ForeignKey('source.id')),
+    Column('tag_id', String, ForeignKey('tag.id'))
+)
+
+content_has_tag = Table(
+    'content_has_tag',
+    Base.metadata,
+    Column('content_id', String, ForeignKey('content.id')),
+    Column('tag_id', String, ForeignKey('tag.id'))
+)
+
 # Tables
 
 
@@ -69,16 +90,22 @@ class Category(Base):
         name (str): Category name.
 
     Relations:
+        sources(list): List of Content related objects.
         contents(list): List of Content related objects.
     """
 
     __tablename__ = 'category'
     id = Column(String, primary_key=True)
     name = Column(String)
+    sources = relationship(
+        'Source',
+        back_populates='categories',
+        secondary=source_has_category,
+    )
     contents = relationship(
         'Content',
         back_populates='categories',
-        secondary=source_has_category,
+        secondary=content_has_category,
     )
 
 
@@ -96,6 +123,16 @@ class Tag(Base):
     __tablename__ = 'tag'
     id = Column(String, primary_key=True)
     name = Column(String)
+    sources = relationship(
+        'Source',
+        back_populates='tags',
+        secondary=source_has_tag,
+    )
+    contents = relationship(
+        'Content',
+        back_populates='tags',
+        secondary=content_has_tag,
+    )
 
 
 class Content(Base):
@@ -118,6 +155,7 @@ class Content(Base):
     Relations:
         author(Author): Author related objects.
         categories(list): List of Category related objects.
+        tags(list): List of Tag related objects.
     """
 
     __tablename__ = 'content'
@@ -146,7 +184,12 @@ class Content(Base):
     categories = relationship(
         'Category',
         back_populates='contents',
-        secondary=source_has_category,
+        secondary=content_has_category,
+    )
+    tags = relationship(
+        'Tag',
+        back_populates='contents',
+        secondary=content_has_tag,
     )
 
     def __init__(
@@ -190,6 +233,8 @@ class Source(Base):
         aggregated_score (float):
 
     Relations:
+        categories(list): List of Category related objects.
+        tags(list): List of Tag related objects.
     """
 
     __tablename__ = 'source'
@@ -213,6 +258,16 @@ class Source(Base):
     url = Column(String)
     aggregated_score = Column(Float)
     aggregated_certainty = Column(Float)
+    categories = relationship(
+        'Category',
+        back_populates='sources',
+        secondary=source_has_category,
+    )
+    tags = relationship(
+        'Tag',
+        back_populates='sources',
+        secondary=source_has_tag,
+    )
 
     def __init__(
         self,
