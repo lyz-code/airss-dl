@@ -70,11 +70,24 @@ class ContentFactory(factory.alchemy.SQLAlchemyModelFactory):
     published_date = factory.Faker('date_time')
     updated_date = factory.Faker('date_time')
     url = factory.Faker('url')
-    author = factory.SubFactory(AuthorFactory)
     score = factory.Faker('random_number')
     predicted_score = factory.Faker('pyfloat')
     predicted_certainty = factory.Faker('pyfloat')
 
     class Meta:
         model = models.Content
+        sqlalchemy_session_persistence = 'commit'
+
+
+class ArticleFactory(ContentFactory):
+    """
+    Class to generate a fake article element.
+    """
+    source_id = factory.Faker('word')
+    summary = factory.Faker('sentence')
+    body = factory.Faker('sentence')
+    image_path = factory.Faker('file_path')
+
+    class Meta:
+        model = models.Article
         sqlalchemy_session_persistence = 'commit'

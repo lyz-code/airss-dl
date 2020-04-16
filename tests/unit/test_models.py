@@ -92,7 +92,6 @@ class TestContent(BaseModelTest):
             published_date=self.dummy_instance.published_date,
             updated_date=self.dummy_instance.updated_date,
             url=self.dummy_instance.url,
-            author=self.dummy_instance.author,
             score=self.dummy_instance.score,
             predicted_score=self.dummy_instance.predicted_score,
             predicted_certainty=self.dummy_instance.predicted_certainty,
@@ -105,10 +104,49 @@ class TestContent(BaseModelTest):
             'published_date',
             'updated_date',
             'url',
-            'author',
             'score',
             'predicted_score',
             'predicted_certainty',
+        ]
+
+
+@pytest.mark.usefixtures('base_setup')
+class TestArticle(TestContent):
+
+    @pytest.fixture(autouse=True)
+    def setup(self, session):
+        self.factory = factories.ArticleFactory
+        self.dummy_instance = self.factory.create()
+        self.model = models.Article(
+            id=self.dummy_instance.id,
+            title=self.dummy_instance.title,
+            created_date=self.dummy_instance.created_date,
+            published_date=self.dummy_instance.published_date,
+            updated_date=self.dummy_instance.updated_date,
+            url=self.dummy_instance.url,
+            score=self.dummy_instance.score,
+            predicted_score=self.dummy_instance.predicted_score,
+            predicted_certainty=self.dummy_instance.predicted_certainty,
+            source_id=self.dummy_instance.source_id,
+            summary=self.dummy_instance.summary,
+            body=self.dummy_instance.body,
+            image_path=self.dummy_instance.image_path,
+        )
+
+        self.model_attributes = [
+            'id',
+            'title',
+            'created_date',
+            'published_date',
+            'updated_date',
+            'url',
+            'score',
+            'predicted_score',
+            'predicted_certainty',
+            'summary',
+            'body',
+            'image_path',
+            'source_id',
         ]
 
 

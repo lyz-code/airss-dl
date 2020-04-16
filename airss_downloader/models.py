@@ -151,6 +151,7 @@ class Content(Base):
         score (int): User content score.
         predicted_certainty (float):
         predicted_score (float):
+        type(str): Content type discriminator.
 
     Relations:
         author(Author): Author related objects.
@@ -181,6 +182,7 @@ class Content(Base):
     score = Column(Integer, doc='User content score')
     predicted_score = Column(Float)
     predicted_certainty = Column(Float)
+    type = Column(Integer, doc='Content type discriminator')
     categories = relationship(
         'Category',
         back_populates='contents',
@@ -192,6 +194,11 @@ class Content(Base):
         secondary=content_has_tag,
     )
 
+    __mapper_args__ = {
+        'polymorphic_identity': 'content',
+        'polymorphic_on': type
+    }
+
     def __init__(
         self,
         id,
@@ -199,11 +206,11 @@ class Content(Base):
         created_date,
         published_date,
         updated_date,
-        url,
-        author,
-        score,
-        predicted_score,
-        predicted_certainty,
+        author=None,
+        url=None,
+        score=None,
+        predicted_score=None,
+        predicted_certainty=None,
     ):
         self.id = id
         self.title = title
@@ -211,10 +218,55 @@ class Content(Base):
         self.published_date = published_date
         self.updated_date = updated_date
         self.url = url
-        self.author = author
         self.score = score
         self.predicted_score = predicted_score
         self.predicted_certainty = predicted_certainty
+
+
+class Article(Content):
+    __tablename__ = 'article'
+    id = Column(String, ForeignKey('content.id'), primary_key=True)
+    summary = Column(String)
+    image_path = Column(String)
+    id_source = Column(String)
+
+    __mapper_args__ = {
+        'polymorphic_identity': 'article',
+    }
+
+    def __init__(
+        self,
+        id,
+        title,
+        created_date,
+        published_date,
+        updated_date,
+        source_id,
+        author=None,
+        url=None,
+        score=None,
+        predicted_score=None,
+        predicted_certainty=None,
+        summary=None,
+        image_path=None,
+        body=None,
+    ):
+        super().__init__(
+            id,
+            title,
+            created_date,
+            published_date,
+            updated_date,
+            url,
+            author,
+            score,
+            predicted_score,
+            predicted_certainty,
+        )
+        self.summary = summary
+        self.body = body
+        self.image_path = image_path
+        self.source_id = source_id
 
 
 class Source(Base):
@@ -273,13 +325,13 @@ class Source(Base):
         self,
         id,
         title,
-        description,
         created_date,
         published_date,
         updated_date,
         url,
-        aggregated_score,
-        aggregated_certainty,
+        description=None,
+        aggregated_score=None,
+        aggregated_certainty=None,
     ):
         self.id = id
         self.title = title
