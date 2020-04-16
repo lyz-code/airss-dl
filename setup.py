@@ -1,8 +1,7 @@
 from setuptools import find_packages
 from setuptools import setup
 
-from pydo import __version__
-
+__version__ = '0.1.0'
 
 setup(
     name='airss_downloader',
@@ -21,7 +20,8 @@ setup(
         'console_scripts': ['airss_downloader = airss_downloader:main']
     },
     install_requires=[
-        "SQLAlchemy==1.3.15",
-        "alembic==1.4.2",
+        "SQLAlchemy>=1.3.15",
+        "alembic>=1.4.2",
+        "feedparser>=5.2.1"
     ]
 )

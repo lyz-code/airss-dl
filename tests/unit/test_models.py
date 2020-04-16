@@ -183,13 +183,13 @@ class TestSource(BaseModelTest):
 
 
 @pytest.mark.usefixtures('base_setup')
-class TestRssArticleSource(BaseModelTest):
+class TestRssSource(BaseModelTest):
 
     @pytest.fixture(autouse=True)
     def setup(self, session):
-        self.factory = factories.RssArticleSourceFactory
+        self.factory = factories.RssSourceFactory
         self.dummy_instance = self.factory.create()
-        self.model = models.RssArticleSource(
+        self.model = models.RssSource(
             id=self.dummy_instance.id,
             title=self.dummy_instance.title,
             description=self.dummy_instance.description,

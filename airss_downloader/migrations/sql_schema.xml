@@ -1,8 +1,8 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8"?>
 <!-- SQL XML created by WWW SQL Designer, https://github.com/ondras/wwwsqldesigner/ -->
 <!-- Active URL: https://ondras.zarovi.cz/sql/demo/?keyword=default -->
 <sql>
-<datatypes db="mysql">
+  <datatypes db="mysql">
     <group label="Numeric" color="rgb(238,238,170)">
       <type label="Integer" length="0" sql="INTEGER" re="INT" quote=""/>
       <type label="Decimal" length="1" sql="DECIMAL" re="DEC" quote=""/>
@@ -29,204 +29,249 @@
       <type label="SET" length="1" sql="SET" quote=""/>
       <type label="Bit" length="0" sql="bit" quote=""/>
     </group>
-  </datatypes><table x="1100" y="400" name="article">
-<row name="id" null="1" autoincrement="1">
-<datatype>INTEGER</datatype>
-<default>NULL</default><relation table="content" row="id" />
-</row>
-<row name="summary" null="1" autoincrement="0">
-<datatype>MEDIUMTEXT</datatype>
-<default>NULL</default></row>
-<row name="image_path" null="1" autoincrement="0">
-<datatype>MEDIUMTEXT</datatype>
-<default>NULL</default></row>
-<row name="source_id" null="1" autoincrement="0">
-<datatype>INTEGER</datatype>
-<default>NULL</default><relation table="rss_article_source" row="id" />
-</row>
-<row name="body" null="1" autoincrement="0">
-<datatype>MEDIUMTEXT</datatype>
-<default>NULL</default></row>
-<key type="PRIMARY" name="">
-<part>id</part>
-</key>
-</table>
-<table x="834" y="100" name="category">
-<row name="id" null="1" autoincrement="1">
-<datatype>INTEGER</datatype>
-<default>NULL</default></row>
-<row name="name" null="1" autoincrement="0">
-<datatype>MEDIUMTEXT</datatype>
-<default>NULL</default></row>
-<key type="PRIMARY" name="">
-<part>id</part>
-</key>
-</table>
-<table x="1402" y="399" name="content">
-<row name="id" null="1" autoincrement="1">
-<datatype>INTEGER</datatype>
-<default>NULL</default><relation table="content_has_tag" row="content_id" />
-</row>
-<row name="title" null="1" autoincrement="0">
-<datatype>MEDIUMTEXT</datatype>
-<default>NULL</default></row>
-<row name="published_date" null="1" autoincrement="0">
-<datatype>DATETIME</datatype>
-<default>NULL</default></row>
-<row name="created_date" null="1" autoincrement="0">
-<datatype>DATETIME</datatype>
-<default>NULL</default></row>
-<row name="updated_date" null="1" autoincrement="0">
-<datatype>DATETIME</datatype>
-<default>NULL</default></row>
-<row name="url" null="1" autoincrement="0">
-<datatype>MEDIUMTEXT</datatype>
-<default>NULL</default></row>
-<row name="author_id" null="1" autoincrement="0">
-<datatype>MEDIUMTEXT</datatype>
-<default>NULL</default><relation table="author" row="id" />
-</row>
-<row name="score" null="1" autoincrement="0">
-<datatype>INTEGER</datatype>
-<default>NULL</default></row>
-<row name="predicted_score" null="1" autoincrement="0">
-<datatype>DECIMAL</datatype>
-<default>NULL</default></row>
-<row name="predicted_certainty" null="1" autoincrement="0">
-<datatype>DECIMAL</datatype>
-<default>NULL</default></row>
-<key type="PRIMARY" name="">
-<part>id</part>
-</key>
-<comment>Most generic type of content</comment>
-</table>
-<table x="502" y="100" name="source_has_category">
-<row name="source_id" null="1" autoincrement="1">
-<datatype>INTEGER</datatype>
-<default>NULL</default></row>
-<row name="category_id" null="1" autoincrement="0">
-<datatype>INTEGER</datatype>
-<default>NULL</default><relation table="category" row="id" />
-</row>
-<row name="id" null="1" autoincrement="1">
-<datatype>INTEGER</datatype>
-<default>NULL</default></row>
-<key type="PRIMARY" name="">
-<part>id</part>
-</key>
-</table>
-<table x="1102" y="100" name="content_has_category">
-<row name="content_id" null="1" autoincrement="1">
-<datatype>INTEGER</datatype>
-<default>NULL</default><relation table="content" row="id" />
-</row>
-<row name="category_id" null="1" autoincrement="0">
-<datatype>INTEGER</datatype>
-<default>NULL</default><relation table="category" row="id" />
-</row>
-<row name="id" null="1" autoincrement="1">
-<datatype>INTEGER</datatype>
-<default>NULL</default></row>
-<key type="PRIMARY" name="">
-<part>id</part>
-</key>
-</table>
-<table x="521" y="401" name="rss_article_source">
-<row name="id" null="1" autoincrement="1">
-<datatype>INTEGER</datatype>
-<default>NULL</default></row>
-<row name="image_path" null="1" autoincrement="0">
-<datatype>MEDIUMTEXT</datatype>
-<default>NULL</default></row>
-<key type="PRIMARY" name="">
-<part>id</part>
-</key>
-</table>
-<table x="243" y="401" name="source">
-<row name="id" null="1" autoincrement="1">
-<datatype>INTEGER</datatype>
-<default>NULL</default><relation table="source_has_category" row="source_id" />
-<relation table="rss_article_source" row="id" />
-<relation table="source_has_tag" row="source_id" />
-</row>
-<row name="title" null="1" autoincrement="0">
-<datatype>MEDIUMTEXT</datatype>
-<default>NULL</default></row>
-<row name="description" null="1" autoincrement="0">
-<datatype>MEDIUMTEXT</datatype>
-<default>NULL</default></row>
-<row name="created_date" null="1" autoincrement="0">
-<datatype>DATETIME</datatype>
-<default>NULL</default></row>
-<row name="published_date" null="1" autoincrement="0">
-<datatype>DATETIME</datatype>
-<default>NULL</default></row>
-<row name="updated_date" null="1" autoincrement="0">
-<datatype>DATETIME</datatype>
-<default>NULL</default></row>
-<row name="url" null="1" autoincrement="0">
-<datatype>MEDIUMTEXT</datatype>
-<default>NULL</default></row>
-<row name="aggregated_score" null="1" autoincrement="0">
-<datatype>DECIMAL</datatype>
-<default>NULL</default></row>
-<row name="aggregated_certainty" null="1" autoincrement="0">
-<datatype>DECIMAL</datatype>
-<default>NULL</default></row>
-<key type="PRIMARY" name="">
-<part>id</part>
-</key>
-</table>
-<table x="851" y="249" name="tag">
-<row name="id" null="1" autoincrement="1">
-<datatype>INTEGER</datatype>
-<default>NULL</default></row>
-<row name="name" null="1" autoincrement="0">
-<datatype>MEDIUMTEXT</datatype>
-<default>NULL</default></row>
-<key type="PRIMARY" name="">
-<part>id</part>
-</key>
-</table>
-<table x="1102" y="248" name="content_has_tag">
-<row name="content_id" null="1" autoincrement="1">
-<datatype>INTEGER</datatype>
-<default>NULL</default></row>
-<row name="tag_id" null="1" autoincrement="0">
-<datatype>INTEGER</datatype>
-<default>NULL</default><relation table="tag" row="id" />
-</row>
-<row name="id" null="1" autoincrement="1">
-<datatype>INTEGER</datatype>
-<default>NULL</default></row>
-<key type="PRIMARY" name="">
-<part>id</part>
-</key>
-</table>
-<table x="534" y="252" name="source_has_tag">
-<row name="source_id" null="1" autoincrement="1">
-<datatype>INTEGER</datatype>
-<default>NULL</default></row>
-<row name="tag_id" null="1" autoincrement="0">
-<datatype>INTEGER</datatype>
-<default>NULL</default><relation table="tag" row="id" />
-</row>
-<row name="id" null="1" autoincrement="0">
-<datatype>INTEGER</datatype>
-<default>NULL</default></row>
-<key type="PRIMARY" name="">
-<part>id</part>
-</key>
-</table>
-<table x="838" y="550" name="author">
-<row name="id" null="1" autoincrement="1">
-<datatype>MEDIUMTEXT</datatype>
-<default>NULL</default></row>
-<row name="name" null="1" autoincrement="0">
-<datatype>MEDIUMTEXT</datatype>
-<default>NULL</default></row>
-<key type="PRIMARY" name="">
-<part>id</part>
-</key>
-</table>
+  </datatypes>
+  <table x="1100" y="400" name="article">
+    <row name="id" null="1" autoincrement="1">
+      <datatype>INTEGER</datatype>
+      <default>NULL</default>
+      <relation table="content" row="id"/>
+    </row>
+    <row name="summary" null="1" autoincrement="0">
+      <datatype>MEDIUMTEXT</datatype>
+      <default>NULL</default>
+    </row>
+    <row name="image_path" null="1" autoincrement="0">
+      <datatype>MEDIUMTEXT</datatype>
+      <default>NULL</default>
+    </row>
+    <row name="source_id" null="1" autoincrement="0">
+      <datatype>INTEGER</datatype>
+      <default>NULL</default>
+      <relation table="rss_source" row="id"/>
+    </row>
+    <row name="body" null="1" autoincrement="0">
+      <datatype>MEDIUMTEXT</datatype>
+      <default>NULL</default>
+    </row>
+    <key type="PRIMARY" name="">
+      <part>id</part>
+    </key>
+  </table>
+  <table x="834" y="100" name="category">
+    <row name="id" null="1" autoincrement="1">
+      <datatype>INTEGER</datatype>
+      <default>NULL</default>
+    </row>
+    <row name="name" null="1" autoincrement="0">
+      <datatype>MEDIUMTEXT</datatype>
+      <default>NULL</default>
+    </row>
+    <key type="PRIMARY" name="">
+      <part>id</part>
+    </key>
+  </table>
+  <table x="1402" y="399" name="content">
+    <row name="id" null="1" autoincrement="1">
+      <datatype>INTEGER</datatype>
+      <default>NULL</default>
+      <relation table="content_has_tag" row="content_id"/>
+    </row>
+    <row name="title" null="1" autoincrement="0">
+      <datatype>MEDIUMTEXT</datatype>
+      <default>NULL</default>
+    </row>
+    <row name="published_date" null="1" autoincrement="0">
+      <datatype>DATETIME</datatype>
+      <default>NULL</default>
+    </row>
+    <row name="created_date" null="1" autoincrement="0">
+      <datatype>DATETIME</datatype>
+      <default>NULL</default>
+    </row>
+    <row name="updated_date" null="1" autoincrement="0">
+      <datatype>DATETIME</datatype>
+      <default>NULL</default>
+    </row>
+    <row name="url" null="1" autoincrement="0">
+      <datatype>MEDIUMTEXT</datatype>
+      <default>NULL</default>
+    </row>
+    <row name="author_id" null="1" autoincrement="0">
+      <datatype>MEDIUMTEXT</datatype>
+      <default>NULL</default>
+      <relation table="author" row="id"/>
+    </row>
+    <row name="score" null="1" autoincrement="0">
+      <datatype>INTEGER</datatype>
+      <default>NULL</default>
+    </row>
+    <row name="predicted_score" null="1" autoincrement="0">
+      <datatype>DECIMAL</datatype>
+      <default>NULL</default>
+    </row>
+    <row name="predicted_certainty" null="1" autoincrement="0">
+      <datatype>DECIMAL</datatype>
+      <default>NULL</default>
+    </row>
+    <key type="PRIMARY" name="">
+      <part>id</part>
+    </key>
+    <comment>Most generic type of content</comment>
+  </table>
+  <table x="502" y="100" name="source_has_category">
+    <row name="source_id" null="1" autoincrement="1">
+      <datatype>INTEGER</datatype>
+      <default>NULL</default>
+    </row>
+    <row name="category_id" null="1" autoincrement="0">
+      <datatype>INTEGER</datatype>
+      <default>NULL</default>
+      <relation table="category" row="id"/>
+    </row>
+    <row name="id" null="1" autoincrement="1">
+      <datatype>INTEGER</datatype>
+      <default>NULL</default>
+    </row>
+    <key type="PRIMARY" name="">
+      <part>id</part>
+    </key>
+  </table>
+  <table x="1102" y="100" name="content_has_category">
+    <row name="content_id" null="1" autoincrement="1">
+      <datatype>INTEGER</datatype>
+      <default>NULL</default>
+      <relation table="content" row="id"/>
+    </row>
+    <row name="category_id" null="1" autoincrement="0">
+      <datatype>INTEGER</datatype>
+      <default>NULL</default>
+      <relation table="category" row="id"/>
+    </row>
+    <row name="id" null="1" autoincrement="1">
+      <datatype>INTEGER</datatype>
+      <default>NULL</default>
+    </row>
+    <key type="PRIMARY" name="">
+      <part>id</part>
+    </key>
+  </table>
+  <table x="521" y="401" name="rss_source">
+    <row name="id" null="1" autoincrement="1">
+      <datatype>INTEGER</datatype>
+      <default>NULL</default>
+    </row>
+    <row name="image_path" null="1" autoincrement="0">
+      <datatype>MEDIUMTEXT</datatype>
+      <default>NULL</default>
+    </row>
+    <key type="PRIMARY" name="">
+      <part>id</part>
+    </key>
+  </table>
+  <table x="243" y="401" name="source">
+    <row name="id" null="1" autoincrement="1">
+      <datatype>INTEGER</datatype>
+      <default>NULL</default>
+      <relation table="source_has_category" row="source_id"/>
+      <relation table="rss_source" row="id"/>
+      <relation table="source_has_tag" row="source_id"/>
+    </row>
+    <row name="title" null="1" autoincrement="0">
+      <datatype>MEDIUMTEXT</datatype>
+      <default>NULL</default>
+    </row>
+    <row name="description" null="1" autoincrement="0">
+      <datatype>MEDIUMTEXT</datatype>
+      <default>NULL</default>
+    </row>
+    <row name="created_date" null="1" autoincrement="0">
+      <datatype>DATETIME</datatype>
+      <default>NULL</default>
+    </row>
+    <row name="published_date" null="1" autoincrement="0">
+      <datatype>DATETIME</datatype>
+      <default>NULL</default>
+    </row>
+    <row name="updated_date" null="1" autoincrement="0">
+      <datatype>DATETIME</datatype>
+      <default>NULL</default>
+    </row>
+    <row name="url" null="1" autoincrement="0">
+      <datatype>MEDIUMTEXT</datatype>
+      <default>NULL</default>
+    </row>
+    <row name="aggregated_score" null="1" autoincrement="0">
+      <datatype>DECIMAL</datatype>
+      <default>NULL</default>
+    </row>
+    <row name="aggregated_certainty" null="1" autoincrement="0">
+      <datatype>DECIMAL</datatype>
+      <default>NULL</default>
+    </row>
+    <key type="PRIMARY" name="">
+      <part>id</part>
+    </key>
+  </table>
+  <table x="851" y="249" name="tag">
+    <row name="id" null="1" autoincrement="1">
+      <datatype>INTEGER</datatype>
+      <default>NULL</default>
+    </row>
+    <row name="name" null="1" autoincrement="0">
+      <datatype>MEDIUMTEXT</datatype>
+      <default>NULL</default>
+    </row>
+    <key type="PRIMARY" name="">
+      <part>id</part>
+    </key>
+  </table>
+  <table x="1102" y="248" name="content_has_tag">
+    <row name="content_id" null="1" autoincrement="1">
+      <datatype>INTEGER</datatype>
+      <default>NULL</default>
+    </row>
+    <row name="tag_id" null="1" autoincrement="0">
+      <datatype>INTEGER</datatype>
+      <default>NULL</default>
+      <relation table="tag" row="id"/>
+    </row>
+    <row name="id" null="1" autoincrement="1">
+      <datatype>INTEGER</datatype>
+      <default>NULL</default>
+    </row>
+    <key type="PRIMARY" name="">
+      <part>id</part>
+    </key>
+  </table>
+  <table x="534" y="252" name="source_has_tag">
+    <row name="source_id" null="1" autoincrement="1">
+      <datatype>INTEGER</datatype>
+      <default>NULL</default>
+    </row>
+    <row name="tag_id" null="1" autoincrement="0">
+      <datatype>INTEGER</datatype>
+      <default>NULL</default>
+      <relation table="tag" row="id"/>
+    </row>
+    <row name="id" null="1" autoincrement="0">
+      <datatype>INTEGER</datatype>
+      <default>NULL</default>
+    </row>
+    <key type="PRIMARY" name="">
+      <part>id</part>
+    </key>
+  </table>
+  <table x="838" y="550" name="author">
+    <row name="id" null="1" autoincrement="1">
+      <datatype>MEDIUMTEXT</datatype>
+      <default>NULL</default>
+    </row>
+    <row name="name" null="1" autoincrement="0">
+      <datatype>MEDIUMTEXT</datatype>
+      <default>NULL</default>
+    </row>
+    <key type="PRIMARY" name="">
+      <part>id</part>
+    </key>
+  </table>
 </sql>

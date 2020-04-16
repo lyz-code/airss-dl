@@ -11,8 +11,7 @@ Classes:
         attributes.
 
     Source: Class to define the source model.
-    RssArticleSource: Class to expand the Source class with rss article
-        specific attributes.
+    RssSource: Class to expand the Source class with rss specific attributes.
 """
 
 import os
@@ -248,8 +247,8 @@ class Article(Content):
     summary = Column(String)
     image_path = Column(String)
     body = Column(String)
-    source_id = Column(String, ForeignKey('rss_article_source.id'))
-    source = relationship('RssArticleSource', back_populates='articles')
+    source_id = Column(String, ForeignKey('rss_source.id'))
+    source = relationship('RssSource', back_populates='articles')
 
     __mapper_args__ = {
         'polymorphic_identity': 'article',
@@ -372,9 +371,9 @@ class Source(Base):
         self.aggregated_certainty = aggregated_certainty
 
 
-class RssArticleSource(Source):
+class RssSource(Source):
     """
-    Class to expand the Source class with rss article specific attributes.
+    Class to expand the Source class with rss specific attributes.
 
     Public attributes:
         image_path(str):
@@ -383,13 +382,13 @@ class RssArticleSource(Source):
         articles(list): List of Article related objects.
     """
 
-    __tablename__ = 'rss_article_source'
+    __tablename__ = 'rss_source'
     id = Column(String, ForeignKey('source.id'), primary_key=True)
     image_path = Column(String)
     articles = relationship('Article', back_populates='source')
 
     __mapper_args__ = {
-        'polymorphic_identity': 'rss_article_source',
+        'polymorphic_identity': 'rss_source',
     }
 
     def __init__(
