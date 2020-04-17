@@ -311,7 +311,7 @@ class Source(Base):
     """
 
     __tablename__ = 'source'
-    id = Column(String, primary_key=True, doc='Source ID')
+    id = Column(Integer, primary_key=True, doc='Source ID')
     title = Column(String)
     description = Column(String)
     created_date = Column(
@@ -328,7 +328,7 @@ class Source(Base):
         DateTime,
         doc='Date of the last database entry update.'
     )
-    url = Column(String)
+    url = Column(String, unique=True)
     aggregated_score = Column(Float)
     aggregated_certainty = Column(Float)
     categories = relationship(

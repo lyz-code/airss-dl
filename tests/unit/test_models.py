@@ -1,4 +1,4 @@
-from airss_downloader import models
+from airss_dl import models
 from tests import factories
 
 import pytest

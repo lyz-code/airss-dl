@@ -1,5 +1,5 @@
-from airss_downloader.extractor import rss
-from airss_downloader import models, exceptions
+from airss_dl.extractor import rss
+from airss_dl import models, exceptions
 from . import ExtractorBaseTest
 from tests import factories
 
@@ -29,11 +29,11 @@ class TestRssExtractor(ExtractorBaseTest):
         self.category = 'rss'
         self.factory = factories.RssSourceFactory
         self.feedparser_patch = patch(
-            'airss_downloader.extractor.rss.feedparser',
+            'airss_dl.extractor.rss.feedparser',
             autospect=True,
         )
         self.datetime_patch = patch(
-            'airss_downloader.extractor.rss.datetime',
+            'airss_dl.extractor.rss.datetime',
             autospect=True
         )
         self.datetime = self.datetime_patch.start()
@@ -87,16 +87,25 @@ class TestRssExtractor(ExtractorBaseTest):
             datetime.datetime(2020, 4, 15, 1, 0)
         self.datetime_patch.start()
 
-    @pytest.mark.skip('Not yet')
     def test_extract_generates_source_if_it_doesnt_exist(self):
         desired_source = self.factory.create()
+        desired_source.created_date = datetime.datetime(2020, 4, 15, 1, 0)
+        desired_source.published_date = datetime.datetime(2020, 3, 15, 1, 0)
+        desired_source.updated_date = datetime.datetime(2020, 2, 15, 1, 0)
 
-        feed = self.feedparser.parse.return_value
+        self.feed.title = desired_source.title
+        self.feed.description = desired_source.description
+        self.feed.created_date = (2020, 4, 15, 0, 0, 0, 2, 106, 0)
+        self.feed.published_date = (2020, 3, 15, 0, 0, 0, 2, 106, 0)
+        self.feed.updated_date = (2020, 2, 15, 0, 0, 0, 2, 106, 0)
+        self.feed.url = desired_source.url
+        self.feed.aggregated_score = desired_source.aggregated_score
+        self.feed.aggregated_certainty = desired_source.aggregated_certainty
 
-        feed.title = desired_source.title
-        feed.description = desired_source.description
+        self.session.delete(desired_source)
+        self.session.commit()
 
-        self.extractor.extract(self.url)
+        self.extractor.extract(desired_source.url)
 
         source = self.session.query(models.RssSource).one()
 

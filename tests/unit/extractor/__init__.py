@@ -25,7 +25,7 @@ class ExtractorBaseTest:
         self.session = session
         self.fake = Faker()
         self.log_patch = patch(
-            'airss_downloader.extractor.logging',
+            'airss_dl.extractor.logging',
             autospect=True,
         )
         self.log = self.log_patch.start()

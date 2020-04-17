@@ -4,7 +4,7 @@ from setuptools import setup
 __version__ = '0.1.0'
 
 setup(
-    name='airss_downloader',
+    name='airss_dl',
     version=__version__,
     description='Program to periodically download stuff from internet',
     author='Lyz',
@@ -12,12 +12,12 @@ setup(
     license='GPLv3',
     long_description=open('README.md').read(),
     packages=find_packages(exclude=('tests',)),
-    package_data={'airss_downloader': [
+    package_data={'airss_dl': [
         'migrations/*',
         'migrations/versions/*',
     ]},
     entry_points={
-        'console_scripts': ['airss_downloader = airss_downloader:main']
+        'console_scripts': ['airss_dl = airss_dl:main']
     },
     install_requires=[
         "SQLAlchemy>=1.3.15",

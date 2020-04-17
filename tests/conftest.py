@@ -11,7 +11,7 @@ temp_ddbb = tempfile.mkstemp()[1]
 os.environ['AIRSS_DATABASE_URL'] = 'sqlite:///{}'.format(temp_ddbb)
 
 # It needs to be after the environmental variable
-from airss_downloader.models import engine
+from airss_dl.models import engine
 from tests import factories
 
 
@@ -26,7 +26,7 @@ def connection():
     connection = engine.connect()
 
     # Applies all alembic migrations.
-    config = Config('airss_downloader/migrations/alembic.ini')
+    config = Config('airss_dl/migrations/alembic.ini')
     upgrade(config, 'head')
 
     # End of setUp

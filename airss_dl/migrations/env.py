@@ -25,7 +25,7 @@ import sys
 
 sys.path = ['', '..'] + sys.path[1:]
 
-from airss_downloader import models
+from airss_dl import models
 target_metadata = models.Base.metadata
 
 # other values from the config, defined by the needs of env.py,

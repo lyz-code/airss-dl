@@ -83,4 +83,5 @@ class RssExtractor(Extractor):
         """
 
         self.log.debug('Extracting information from {}'.format(url))
-        self._parse(url)
+        data = self._parse(url)
+
