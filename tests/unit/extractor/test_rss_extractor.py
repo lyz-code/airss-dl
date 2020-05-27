@@ -262,3 +262,19 @@ class TestRssExtractor(ExtractorBaseTest):
         tags = self.session.query(models.Tag).all()
         assert article_tags[0].id == desired_tag.id
         assert len(tags) == 1
+
+    @patch('airss_dl.extractor.rss.datetime')
+    def test_extract_updates_source_updated_date(self, dateMock):
+        now = datetime.datetime.now()
+        dateMock.now.return_value = now
+
+        desired_source = self.source_factory.create()
+
+        self.feed.link = desired_source.url
+        self.feed.entries = []
+
+        self.extractor.extract(desired_source.url)
+
+        source = self.session.query(models.RssSource).one()
+
+        assert source.updated_date == now

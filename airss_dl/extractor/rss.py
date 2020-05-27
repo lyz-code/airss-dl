@@ -181,9 +181,9 @@ class RssExtractor(Extractor):
         except AttributeError:
             self.data = self._parse(url)
 
-        source_id = self.session.query(models.RssSource).filter_by(
+        source = self.session.query(models.RssSource).filter_by(
             url=self.data.link
-        ).one().id
+        ).first()
 
         now = datetime.now()
         for entry in self.data.entries:
@@ -197,7 +197,7 @@ class RssExtractor(Extractor):
                 updated_date=now,
                 url=entry.link,
                 summary=entry.summary,
-                source_id=source_id,
+                source_id=source.id,
             )
 
             try:
@@ -213,3 +213,5 @@ class RssExtractor(Extractor):
             self.session.add(article)
             self.log.debug('Adding Article {}'.format('url'))
             self.session.commit()
+        source.updated_date = datetime.now()
+        self.session.commit()
