@@ -224,7 +224,7 @@ class Article(Content):
     summary = Column(String)
     image_path = Column(String)
     body = Column(String)
-    source_id = Column(String, ForeignKey('rss_source.id'))
+    source_id = Column(Integer, ForeignKey('rss_source.id'))
     source = relationship('RssSource', back_populates='articles')
 
     __mapper_args__ = {
@@ -263,7 +263,11 @@ class Source(Base):
     )
     updated_date = Column(
         DateTime,
-        doc='Date of the last database entry update.'
+        doc='Date of the last source content update.'
+    )
+    last_fetch = Column(
+        DateTime,
+        doc='Date of the last time the source was fetched.'
     )
     url = Column(String, unique=True)
     aggregated_score = Column(Float)

@@ -29,3 +29,8 @@ class TestMain:
         self.sessionmaker.return_value.assert_called_once_with(
             bind=self.engine.connect.return_value
         )
+
+    @patch('airss_dl.load_logger')
+    def test_main_loads_logger(self, loggerMock):
+        main()
+        assert loggerMock.called

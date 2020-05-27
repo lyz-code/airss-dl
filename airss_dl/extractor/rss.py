@@ -92,21 +92,24 @@ class RssExtractor(Extractor):
         if len(
             self.session.query(models.RssSource).filter_by(url=url).all()
         ) == 0:
+            try:
+                updated_date = self.data.updated_parsed
+            except AttributeError:
+                updated_date = self.data.feed.updated_parsed
+
             source = models.RssSource(
                 title=self.data.feed.title,
                 description=self.data.feed.subtitle,
                 created_date=datetime.now(),
-                updated_date=self._feed_time_to_datetime(
-                    self.data.updated_parsed
-                ),
+                updated_date=self._feed_time_to_datetime(updated_date),
                 url=url,
             )
             self.session.add(source)
-            self.log.debug('Adding {} source'.format('url'))
+            self.log.debug('Adding {} source'.format(url))
             self.session.commit()
         else:
             self.log.debug(
-                'IntegrityError: {} source already exists'.format('url')
+                'IntegrityError: {} source already exists'.format(url)
             )
 
     def _extract_author(self, entry):
@@ -129,6 +132,7 @@ class RssExtractor(Extractor):
                 author = models.Author(
                     name=entry.author
                 )
+                self.log.debug('  Adding Author {}'.format(author.name))
                 self.session.add(author)
                 self.session.commit()
             return author
@@ -158,6 +162,7 @@ class RssExtractor(Extractor):
                     tag = models.Tag(
                         name=tag_data['term']
                     )
+                    self.log.debug('  Adding Tag {}'.format(tag.name))
                     self.session.add(tag)
                     self.session.commit()
                 tags.append(tag)
@@ -181,37 +186,50 @@ class RssExtractor(Extractor):
         except AttributeError:
             self.data = self._parse(url)
 
+        self.log.debug('Obtaining associated Source')
         source = self.session.query(models.RssSource).filter_by(
-            url=self.data.link
+            url=url
         ).first()
 
         now = datetime.now()
+        all_entries = len(self.data.entries)
+        counter = 0
         for entry in self.data.entries:
-            article = models.Article(
-                id=entry.id,
-                title=entry.title,
-                published_date=self._feed_time_to_datetime(
-                    entry.published_parsed
-                ),
-                created_date=now,
-                updated_date=now,
-                url=entry.link,
-                summary=entry.summary,
-                source_id=source.id,
-            )
+            counter += 1
+            self.log.debug('{}/{}: Processing {}'.format(
+                counter,
+                all_entries,
+                entry.id
+            ))
+            article = self.session.query(models.Article).get(entry.id)
+            if article is None:
+                article = models.Article(
+                    id=entry.id,
+                    title=entry.title,
+                    published_date=self._feed_time_to_datetime(
+                        entry.published_parsed
+                    ),
+                    created_date=now,
+                    updated_date=now,
+                    url=entry.link,
+                    summary=entry.summary,
+                    source_id=source.id,
+                )
 
-            try:
-                article.image_path = entry.media_thumbnail[0]['url']
-            except (AttributeError, TypeError):
-                pass
+                try:
+                    article.image_path = entry.media_thumbnail[0]['url']
+                except (AttributeError, TypeError):
+                    pass
 
-            article.author = self._extract_author(entry)
-            tags = self._extract_tags(entry)
-            if tags is not None:
-                article.tags = tags
+                article.author = self._extract_author(entry)
+                tags = self._extract_tags(entry)
+                if tags is not None:
+                    article.tags = tags
 
-            self.session.add(article)
-            self.log.debug('Adding Article {}'.format('url'))
-            self.session.commit()
-        source.updated_date = datetime.now()
+                self.log.debug('  Adding Article {}'.format(url))
+                self.session.add(article)
+                self.session.commit()
+            else:
+                self.log.debug('  Article already exists')
+        source.last_fetch = datetime.now()
         self.session.commit()

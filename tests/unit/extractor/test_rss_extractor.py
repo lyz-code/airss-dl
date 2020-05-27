@@ -1,5 +1,9 @@
-from airss_dl.extractor import rss
+"""
+Module to unit test the RSS extractor.
+"""
+
 from airss_dl import models, exceptions
+from airss_dl.extractor import rss
 from . import ExtractorBaseTest
 from tests import factories
 
@@ -12,7 +16,7 @@ import pytest
 @pytest.mark.usefixtures('base_setup')
 class TestRssExtractor(ExtractorBaseTest):
     """
-    Class to test the TaskManager object.
+    Class to test the RssExtractor object.
 
     Public attributes:
         fake (Faker object): Faker object.
@@ -144,7 +148,6 @@ class TestRssExtractor(ExtractorBaseTest):
         articleMock.summary = desired_article.summary
         articleMock.title = desired_article.title
 
-        self.feed.link = desired_source.url
         self.feed.entries = [articleMock]
 
         self.session.delete(desired_article)
@@ -162,6 +165,27 @@ class TestRssExtractor(ExtractorBaseTest):
         assert article.url == desired_article.url
         assert article.summary == desired_article.summary
         assert article.source_id == desired_source.id
+
+    def test_extract_doesnt_generate_the_content_if_exist(self):
+        desired_source = self.source_factory.create()
+        desired_article = self.content_factory.create()
+
+        articleMock = Mock(spec=[
+            'id',
+            'title',
+            'link',
+            'published_parsed',
+            'summary',
+        ])
+        articleMock.id = desired_article.id
+
+        self.feed.entries = [articleMock]
+
+        self.extractor.extract(desired_source.url)
+
+        articles = self.session.query(models.Article).all()
+
+        assert len(articles) == 1
 
     def test_extract_generates_image_path(self):
         desired_source = self.source_factory.create()
@@ -185,7 +209,6 @@ class TestRssExtractor(ExtractorBaseTest):
         articleMock.published_parsed = (2020, 2, 15, 1, 0, 0, 2, 106, 0)
         articleMock.summary = self.fake.sentence()
 
-        self.feed.link = desired_source.url
         self.feed.entries = [articleMock]
 
         self.extractor.extract(desired_source.url)
@@ -270,11 +293,10 @@ class TestRssExtractor(ExtractorBaseTest):
 
         desired_source = self.source_factory.create()
 
-        self.feed.link = desired_source.url
         self.feed.entries = []
 
         self.extractor.extract(desired_source.url)
 
         source = self.session.query(models.RssSource).one()
 
-        assert source.updated_date == now
+        assert source.last_fetch == now

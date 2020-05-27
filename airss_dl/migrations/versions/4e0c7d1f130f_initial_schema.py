@@ -34,6 +34,7 @@ def upgrade():
     sa.Column('description', sa.String(), nullable=True),
     sa.Column('created_date', sa.DateTime(), nullable=False),
     sa.Column('updated_date', sa.DateTime(), nullable=True),
+    sa.Column('last_fetch', sa.DateTime(), nullable=True),
     sa.Column('url', sa.String(), nullable=True),
     sa.Column('aggregated_score', sa.Float(), nullable=True),
     sa.Column('aggregated_certainty', sa.Float(), nullable=True),
