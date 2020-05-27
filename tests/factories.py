@@ -9,7 +9,7 @@ class AuthorFactory(factory.alchemy.SQLAlchemyModelFactory):
     """
     Class to generate a fake author element.
     """
-    id = factory.Faker('word')
+    id = factory.Faker('random_number')
     name = factory.Faker('name')
 
     class Meta:
@@ -21,7 +21,7 @@ class CategoryFactory(factory.alchemy.SQLAlchemyModelFactory):
     """
     Class to generate a fake category element.
     """
-    id = factory.Faker('word')
+    id = factory.Faker('random_number')
     name = factory.Faker('name')
 
     class Meta:
@@ -33,7 +33,7 @@ class TagFactory(factory.alchemy.SQLAlchemyModelFactory):
     """
     Class to generate a fake tag element.
     """
-    id = factory.Faker('word')
+    id = factory.Faker('random_number')
     name = factory.Faker('name')
 
     class Meta:
@@ -49,7 +49,6 @@ class SourceFactory(factory.alchemy.SQLAlchemyModelFactory):
     title = factory.Faker('sentence')
     description = factory.Faker('sentence')
     created_date = factory.Faker('date_time')
-    published_date = factory.Faker('date_time')
     updated_date = factory.Faker('date_time')
     url = factory.Faker('url')
     aggregated_score = factory.Faker('pyfloat')
@@ -75,10 +74,10 @@ class ContentFactory(factory.alchemy.SQLAlchemyModelFactory):
     """
     Class to generate a fake content element.
     """
-    id = factory.Sequence(lambda n: n)
+    id = factory.Faker('word')
     title = factory.Faker('sentence')
-    created_date = factory.Faker('date_time')
     published_date = factory.Faker('date_time')
+    created_date = factory.Faker('date_time')
     updated_date = factory.Faker('date_time')
     url = factory.Faker('url')
     score = factory.Faker('random_number')

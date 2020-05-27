@@ -81,7 +81,7 @@ class Author(Base):
     """
 
     __tablename__ = 'author'
-    id = Column(String, primary_key=True)
+    id = Column(Integer, primary_key=True)
     name = Column(String)
     contents = relationship('Content', back_populates='author')
 
@@ -100,7 +100,7 @@ class Category(Base):
     """
 
     __tablename__ = 'category'
-    id = Column(String, primary_key=True)
+    id = Column(Integer, primary_key=True)
     name = Column(String)
     sources = relationship(
         'Source',
@@ -126,7 +126,7 @@ class Tag(Base):
     """
 
     __tablename__ = 'tag'
-    id = Column(String, primary_key=True)
+    id = Column(Integer, primary_key=True)
     name = Column(String)
     sources = relationship(
         'Source',
@@ -152,7 +152,7 @@ class Content(Base):
         published_date (Datetime): Date of publication.
         updated_date (Datetime): Date of the last database entry update.
         url (str):
-        author_id (str):
+        author_id (int):
         score (int): User content score.
         predicted_certainty (float):
         predicted_score (float):
@@ -165,7 +165,7 @@ class Content(Base):
     """
 
     __tablename__ = 'content'
-    id = Column(Integer, primary_key=True, doc='Content ID')
+    id = Column(String, primary_key=True, doc='Content ID')
     title = Column(String)
     created_date = Column(
         DateTime,
@@ -182,7 +182,7 @@ class Content(Base):
         doc='Date of the last database entry update.'
     )
     url = Column(String)
-    author_id = Column(String, ForeignKey(Author.id))
+    author_id = Column(Integer, ForeignKey(Author.id))
     author = relationship('Author', back_populates='contents')
     score = Column(Integer, doc='User content score')
     predicted_score = Column(Float)
@@ -203,29 +203,6 @@ class Content(Base):
         'polymorphic_identity': 'content',
         'polymorphic_on': type
     }
-
-    def __init__(
-        self,
-        id,
-        title,
-        created_date,
-        published_date,
-        updated_date,
-        author=None,
-        url=None,
-        score=None,
-        predicted_score=None,
-        predicted_certainty=None,
-    ):
-        self.id = id
-        self.title = title
-        self.created_date = created_date
-        self.published_date = published_date
-        self.updated_date = updated_date
-        self.url = url
-        self.score = score
-        self.predicted_score = predicted_score
-        self.predicted_certainty = predicted_certainty
 
 
 class Article(Content):
@@ -254,40 +231,6 @@ class Article(Content):
         'polymorphic_identity': 'article',
     }
 
-    def __init__(
-        self,
-        id,
-        title,
-        created_date,
-        published_date,
-        updated_date,
-        source_id,
-        author=None,
-        url=None,
-        score=None,
-        predicted_score=None,
-        predicted_certainty=None,
-        summary=None,
-        image_path=None,
-        body=None,
-    ):
-        super().__init__(
-            id,
-            title,
-            created_date,
-            published_date,
-            updated_date,
-            url,
-            author,
-            score,
-            predicted_score,
-            predicted_certainty,
-        )
-        self.summary = summary
-        self.body = body
-        self.image_path = image_path
-        self.source_id = source_id
-
 
 class Source(Base):
     """
@@ -298,7 +241,6 @@ class Source(Base):
         title (str):
         description (str):
         created_date (Datetime): Date of introduction to the database.
-        published_date (Datetime): Date of publication.
         updated_date (Datetime): Date of the last database entry update.
         url (str):
         aggregated_certainty (float):
@@ -318,11 +260,6 @@ class Source(Base):
         DateTime,
         nullable=False,
         doc='Date of introduction to the database.'
-    )
-    published_date = Column(
-        DateTime,
-        nullable=False,
-        doc='Date of publication.'
     )
     updated_date = Column(
         DateTime,
@@ -348,28 +285,6 @@ class Source(Base):
         'polymorphic_on': type
     }
 
-    def __init__(
-        self,
-        id,
-        title,
-        created_date,
-        published_date,
-        updated_date,
-        url,
-        description=None,
-        aggregated_score=None,
-        aggregated_certainty=None,
-    ):
-        self.id = id
-        self.title = title
-        self.description = description
-        self.created_date = created_date
-        self.published_date = published_date
-        self.updated_date = updated_date
-        self.url = url
-        self.aggregated_score = aggregated_score
-        self.aggregated_certainty = aggregated_certainty
-
 
 class RssSource(Source):
     """
@@ -390,29 +305,3 @@ class RssSource(Source):
     __mapper_args__ = {
         'polymorphic_identity': 'rss_source',
     }
-
-    def __init__(
-        self,
-        id,
-        title,
-        created_date,
-        published_date,
-        updated_date,
-        url,
-        image_path=None,
-        description=None,
-        aggregated_score=None,
-        aggregated_certainty=None,
-    ):
-        super().__init__(
-            id,
-            title,
-            created_date,
-            published_date,
-            updated_date,
-            url,
-            description=None,
-            aggregated_score=None,
-            aggregated_certainty=None,
-        )
-        self.image_path = image_path

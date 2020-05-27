@@ -158,11 +158,9 @@ class TestSource(BaseModelTest):
         self.factory = factories.SourceFactory
         self.dummy_instance = self.factory.create()
         self.model = models.Source(
-            id=self.dummy_instance.id,
             title=self.dummy_instance.title,
             description=self.dummy_instance.description,
             created_date=self.dummy_instance.created_date,
-            published_date=self.dummy_instance.published_date,
             updated_date=self.dummy_instance.updated_date,
             url=self.dummy_instance.url,
             aggregated_score=self.dummy_instance.aggregated_score,
@@ -170,11 +168,9 @@ class TestSource(BaseModelTest):
         )
 
         self.model_attributes = [
-            'id',
             'title',
             'description',
             'created_date',
-            'published_date',
             'updated_date',
             'url',
             'aggregated_score',
@@ -190,11 +186,9 @@ class TestRssSource(BaseModelTest):
         self.factory = factories.RssSourceFactory
         self.dummy_instance = self.factory.create()
         self.model = models.RssSource(
-            id=self.dummy_instance.id,
             title=self.dummy_instance.title,
             description=self.dummy_instance.description,
             created_date=self.dummy_instance.created_date,
-            published_date=self.dummy_instance.published_date,
             updated_date=self.dummy_instance.updated_date,
             url=self.dummy_instance.url,
             aggregated_score=self.dummy_instance.aggregated_score,
@@ -203,11 +197,9 @@ class TestRssSource(BaseModelTest):
         )
 
         self.model_attributes = [
-            'id',
             'title',
             'description',
             'created_date',
-            'published_date',
             'updated_date',
             'url',
             'aggregated_score',

@@ -17,7 +17,7 @@ setup(
         'migrations/versions/*',
     ]},
     entry_points={
-        'console_scripts': ['airss_dl = airss_dl:main']
+        'console_scripts': ['airss-dl = airss_dl:main']
     },
     install_requires=[
         "SQLAlchemy>=1.3.15",
