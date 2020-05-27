@@ -8,7 +8,7 @@ Functions:
 
 import logging
 import argparse
-# import argcomplete
+import argcomplete
 
 
 def load_parser():
@@ -18,22 +18,21 @@ def load_parser():
 
     # Argparse
     parser = argparse.ArgumentParser(
-        description='CLI task manager built with Python and SQLite.',
+        description='Airss content downloader',
     )
 
     subparser = parser.add_subparsers(dest='subcommand', help='subcommands')
-    subparser.add_parser('install')
+    extract_parser = subparser.add_parser('extract')
 
-    add_parser = subparser.add_parser('add')
-    add_parser.add_argument(
-        "add_argument",
+    extract_parser.add_argument(
+        "url",
         type=str,
-        help='Task add arguments',
-        default=None,
-        nargs=argparse.REMAINDER,
+        help='URL to extract',
     )
 
-    # argcomplete.autocomplete(parser)
+    subparser.add_parser('install')
+
+    argcomplete.autocomplete(parser)
     return parser
 
 
@@ -47,7 +46,7 @@ def load_logger():
     logging.addLevelName(logging.DEBUG, "[\033[32mDEBUG\033[0m]")
     logging.addLevelName(logging.WARNING, "[\033[33mWARNING\033[0m]")
     logging.basicConfig(
-        level=logging.DEBUG,
+        level=logging.INFO,
         format="  %(levelname)s %(message)s"
     )
     return logging.getLogger('main')

@@ -1,7 +1,28 @@
-from setuptools import find_packages
-from setuptools import setup
+from setuptools import find_packages, setup
+from setuptools.command.install import install
+
+import logging
+import os
 
 __version__ = '0.1.0'
+
+
+class PostInstallCommand(install):
+    """Post-installation for installation mode."""
+
+    def run(self):
+        install.run(self)
+        logger = logging.getLogger("main")
+        try:
+            data_directory = os.path.expanduser("~/.local/share/airss")
+            os.makedirs(data_directory)
+            logger.info("Data directory created")
+        except FileExistsError:
+            logger.info("Data directory already exits")
+        import airss_dl
+
+        airss_dl.main(["install"])
+
 
 setup(
     name='airss_dl',
@@ -16,12 +37,16 @@ setup(
         'migrations/*',
         'migrations/versions/*',
     ]},
+    cmdclass={
+        "install": PostInstallCommand,
+    },
     entry_points={
         'console_scripts': ['airss-dl = airss_dl:main']
     },
     install_requires=[
-        "SQLAlchemy>=1.3.15",
         "alembic>=1.4.2",
-        "feedparser>=5.2.1"
+        "argcomplete>=1.11.1",
+        "feedparser>=5.2.1",
+        "SQLAlchemy>=1.3.15"
     ]
 )

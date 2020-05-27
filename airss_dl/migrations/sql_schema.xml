@@ -83,7 +83,7 @@
 <datatype>MEDIUMTEXT</datatype>
 <default>NULL</default></row>
 <row name="author_id" null="1" autoincrement="0">
-<datatype>MEDIUMTEXT</datatype>
+<datatype>INTEGER</datatype>
 <default>NULL</default><relation table="author" row="id" />
 </row>
 <row name="score" null="1" autoincrement="0">
@@ -158,7 +158,7 @@
 <row name="created_date" null="1" autoincrement="0">
 <datatype>DATETIME</datatype>
 <default>NULL</default></row>
-<row name="published_date" null="1" autoincrement="0">
+<row name="last_fetch" null="1" autoincrement="0">
 <datatype>DATETIME</datatype>
 <default>NULL</default></row>
 <row name="updated_date" null="1" autoincrement="0">
@@ -220,7 +220,7 @@
 </table>
 <table x="838" y="550" name="author">
 <row name="id" null="1" autoincrement="1">
-<datatype>MEDIUMTEXT</datatype>
+<datatype>INTEGER</datatype>
 <default>NULL</default></row>
 <row name="name" null="1" autoincrement="0">
 <datatype>MEDIUMTEXT</datatype>

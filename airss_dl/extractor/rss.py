@@ -86,7 +86,7 @@ class RssExtractor(Extractor):
             None
         """
 
-        self.log.debug('Extracting information from {}'.format(url))
+        self.log.info('Extracting information from {}'.format(url))
         self.data = self._parse(url)
 
         if len(
@@ -105,11 +105,11 @@ class RssExtractor(Extractor):
                 url=url,
             )
             self.session.add(source)
-            self.log.debug('Adding {} source'.format(url))
+            self.log.info('Adding {} source'.format(url))
             self.session.commit()
         else:
-            self.log.debug(
-                'IntegrityError: {} source already exists'.format(url)
+            self.log.info(
+                '{} source already exists'.format(url)
             )
 
     def _extract_author(self, entry):
@@ -132,7 +132,7 @@ class RssExtractor(Extractor):
                 author = models.Author(
                     name=entry.author
                 )
-                self.log.debug('  Adding Author {}'.format(author.name))
+                self.log.info('  Adding Author {}'.format(author.name))
                 self.session.add(author)
                 self.session.commit()
             return author
@@ -162,7 +162,7 @@ class RssExtractor(Extractor):
                     tag = models.Tag(
                         name=tag_data['term']
                     )
-                    self.log.debug('  Adding Tag {}'.format(tag.name))
+                    self.log.info('  Adding Tag {}'.format(tag.name))
                     self.session.add(tag)
                     self.session.commit()
                 tags.append(tag)
@@ -186,7 +186,7 @@ class RssExtractor(Extractor):
         except AttributeError:
             self.data = self._parse(url)
 
-        self.log.debug('Obtaining associated Source')
+        self.log.info('Obtaining associated Source')
         source = self.session.query(models.RssSource).filter_by(
             url=url
         ).first()
@@ -196,7 +196,7 @@ class RssExtractor(Extractor):
         counter = 0
         for entry in self.data.entries:
             counter += 1
-            self.log.debug('{}/{}: Processing {}'.format(
+            self.log.info('{}/{}: Processing {}'.format(
                 counter,
                 all_entries,
                 entry.id
@@ -226,10 +226,10 @@ class RssExtractor(Extractor):
                 if tags is not None:
                     article.tags = tags
 
-                self.log.debug('  Adding Article {}'.format(url))
+                self.log.info('  Adding Article {}'.format(entry.link))
                 self.session.add(article)
                 self.session.commit()
             else:
-                self.log.debug('  Article already exists')
+                self.log.info('  Article already exists')
         source.last_fetch = datetime.now()
         self.session.commit()

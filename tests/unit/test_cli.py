@@ -13,6 +13,14 @@ class TestArgparse:
         self.fake = Faker()
         self.parser = load_parser()
 
+    def test_can_specify_extract_subcommand(self):
+        parsed = self.parser.parse_args(['extract', self.fake.url()])
+        assert parsed.subcommand == 'extract'
+
+    def test_can_specify_install_subcommand(self):
+        parsed = self.parser.parse_args(['install'])
+        assert parsed.subcommand == 'install'
+
 
 class TestLogger:
 

@@ -16,20 +16,26 @@
 # You should have received a copy of the GNU General Public License
 # along with airss.  If not, see <http://www.gnu.org/licenses/>.
 
-from airss_dl.cli import load_logger
-from airss_dl.models import engine
+from airss_dl.cli import load_logger, load_parser
 from airss_dl.extractor import rss
+from airss_dl.models import engine
+from airss_dl.ops import install
 from sqlalchemy.orm import sessionmaker
 
+import logging
+import sys
 
-def main():
 
+def main(argv=sys.argv[1:]):
+    args = load_parser().parse_args(argv)
     load_logger()
+    log = logging.getLogger('main')
     connection = engine.connect()
     session = sessionmaker()(bind=connection)
 
-    extractor = rss.RssExtractor(session)
-    # extractor.create_source('https://www.gamingonlinux.com/article_rss.php')
-    # extractor.extract('https://www.gamingonlinux.com/article_rss.php')
-    extractor.create_source('https://xkcd.com/rss.xml')
-    extractor.extract('https://xkcd.com/rss.xml')
+    if args.subcommand == 'install':
+        install(session, log)
+    elif args.subcommand == 'extract':
+        extractor = rss.RssExtractor(session)
+        extractor.create_source(args.url)
+        extractor.extract(args.url)
