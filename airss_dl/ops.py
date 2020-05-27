@@ -21,7 +21,13 @@ def install(session, log):
         None
     '''
 
-    log.info('Initializing database')
+    # Create data directory
+    data_directory = os.path.expanduser('~/.local/share/airss')
+    if not os.path.exists(data_directory):
+        os.makedirs(data_directory)
+        log.info('Data directory created')
+
+    # Install the database schema
     airss_dir = os.path.dirname(os.path.abspath(__file__))
 
     alembic_args = [
@@ -31,3 +37,4 @@ def install(session, log):
         'head',
     ]
     alembic.config.main(argv=alembic_args)
+    log.info('Database initialized')

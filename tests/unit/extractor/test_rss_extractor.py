@@ -136,13 +136,11 @@ class TestRssExtractor(ExtractorBaseTest):
 
         now = datetime.datetime.now()
         articleMock = Mock(spec=[
-            'id',
             'title',
             'link',
             'published_parsed',
             'summary',
         ])
-        articleMock.id = desired_article.id
         articleMock.link = desired_article.url
         articleMock.published_parsed = (2020, 2, 15, 1, 0, 0, 2, 106, 0)
         articleMock.summary = desired_article.summary
@@ -157,7 +155,6 @@ class TestRssExtractor(ExtractorBaseTest):
 
         article = self.session.query(models.Article).one()
 
-        assert article.id == desired_article.id
         assert article.title == desired_article.title
         assert article.published_date == datetime.datetime(2020, 2, 15, 1, 0)
         assert article.created_date >= now
@@ -171,13 +168,12 @@ class TestRssExtractor(ExtractorBaseTest):
         desired_article = self.content_factory.create()
 
         articleMock = Mock(spec=[
-            'id',
             'title',
             'link',
             'published_parsed',
             'summary',
         ])
-        articleMock.id = desired_article.id
+        articleMock.link = desired_article.url
 
         self.feed.entries = [articleMock]
 

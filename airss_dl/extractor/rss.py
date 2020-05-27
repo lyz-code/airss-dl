@@ -22,11 +22,18 @@ class RssExtractor(Extractor):
         session (session object): Database session
 
     Public methods:
-        create_source: Parse url content to ingest it in the database.
+        create_source: Parse url content to add the source information in the
+            database.
+        extract: Parse the url content to add the source content in the
+            database.
 
     Internal methods:
+        _feed_time_to_datetime: Convert feedparser parsed dates into datetime
+            objects.
         _parse: Parse the url content into a feedparser object.
         _extract_author: Parse the feed entry to return the author of the
+            entry.
+        _extract_author: Parse the feed entry to return the tags of the
             entry.
 
     Public attributes:
@@ -77,7 +84,7 @@ class RssExtractor(Extractor):
 
     def create_source(self, url):
         """
-        Parse the url content to ingest the source it in the database.
+        Parse url content to add the source information in the database.
 
         Arguments:
             url (str): Url to parse
@@ -172,7 +179,7 @@ class RssExtractor(Extractor):
 
     def extract(self, url):
         """
-        Parse the url content to ingest the source it in the database.
+        Parse the url content to add the source content in the database.
 
         Arguments:
             url (str): Url to parse
@@ -199,12 +206,13 @@ class RssExtractor(Extractor):
             self.log.info('{}/{}: Processing {}'.format(
                 counter,
                 all_entries,
-                entry.id
+                entry.link
             ))
-            article = self.session.query(models.Article).get(entry.id)
+            article = self.session.query(models.Article).filter_by(
+                url=entry.link
+            ).first()
             if article is None:
                 article = models.Article(
-                    id=entry.id,
                     title=entry.title,
                     published_date=self._feed_time_to_datetime(
                         entry.published_parsed

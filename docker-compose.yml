@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  extractor:
+    image: airss-dl:latest
+    restart: always
+    links:
+      - db
+    depends_on:
+      - db
+    environment:
+      - AIRSS_DATABASE_URL=mysql+pymysql://airss:supersecurepassword@db/airss?charset=utf8mb4&binary_prefix=true
+
+  db:
+    image: mariadb:latest
+    restart: always
+    environment:
+      - MYSQL_USER=airss
+      - MYSQL_PASSWORD=supersecurepassword
+      - MYSQL_DATABASE=airss
+      - MYSQL_ALLOW_EMPTY_PASSWORD=yes
+    ports:
+      - 3306:3306
+    command:
+      - '--character-set-server=utf8mb4'
+      - '--collation-server=utf8mb4_unicode_ci'
+    volumes:
+      - /data/airss/mariadb:/var/lib/mysql

@@ -8,7 +8,7 @@ Functions:
 
 import logging
 import argparse
-import argcomplete
+# import argcomplete
 
 
 def load_parser():
@@ -32,7 +32,7 @@ def load_parser():
 
     subparser.add_parser('install')
 
-    argcomplete.autocomplete(parser)
+    # argcomplete.autocomplete(parser)
     return parser
 
 

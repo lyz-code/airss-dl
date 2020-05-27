@@ -39,6 +39,21 @@ class TestInstall:
         self.alembic_patch.stop()
         self.os_patch.stop()
 
+    def test_creates_the_data_directory_if_it_doesnt_exist(self):
+        self.os.path.exists.return_value = False
+
+        install(self.session, self.log)
+        self.os.makedirs.assert_called_with(
+                os.path.join(self.homedir, '.local/share/airss')
+        )
+        assert call('Data directory created') in self.log_info.mock_calls
+
+    def test_doesnt_create_data_directory_if_exist(self):
+        self.os.path.exists.return_value = True
+
+        install(self.session, self.log)
+        assert self.os.makedirs.called is False
+
     def test_initializes_database(self):
         alembic_args = [
             '-c',
@@ -50,4 +65,4 @@ class TestInstall:
         install(self.session, self.log)
 
         self.alembic.config.main.assert_called_with(argv=alembic_args)
-        assert call('Initializing database') in self.log_info.mock_calls
+        assert call('Database initialized') in self.log_info.mock_calls

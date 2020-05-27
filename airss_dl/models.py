@@ -24,7 +24,8 @@ from sqlalchemy import \
     ForeignKey, \
     Integer, \
     String, \
-    Table
+    Table, \
+    Text
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
 
@@ -40,29 +41,29 @@ Base = declarative_base(bind=engine)
 source_has_category = Table(
     'source_has_category',
     Base.metadata,
-    Column('source_id', String, ForeignKey('source.id')),
-    Column('category_id', String, ForeignKey('category.id'))
+    Column('source_id', Integer, ForeignKey('source.id')),
+    Column('category_id', Integer, ForeignKey('category.id'))
 )
 
 content_has_category = Table(
     'content_has_category',
     Base.metadata,
-    Column('content_id', String, ForeignKey('content.id')),
-    Column('category_id', String, ForeignKey('category.id'))
+    Column('content_id', Integer, ForeignKey('content.id')),
+    Column('category_id', Integer, ForeignKey('category.id'))
 )
 
 source_has_tag = Table(
     'source_has_tag',
     Base.metadata,
-    Column('source_id', String, ForeignKey('source.id')),
-    Column('tag_id', String, ForeignKey('tag.id'))
+    Column('source_id', Integer, ForeignKey('source.id')),
+    Column('tag_id', Integer, ForeignKey('tag.id'))
 )
 
 content_has_tag = Table(
     'content_has_tag',
     Base.metadata,
-    Column('content_id', String, ForeignKey('content.id')),
-    Column('tag_id', String, ForeignKey('tag.id'))
+    Column('content_id', Integer, ForeignKey('content.id')),
+    Column('tag_id', Integer, ForeignKey('tag.id'))
 )
 
 # Tables
@@ -82,7 +83,7 @@ class Author(Base):
 
     __tablename__ = 'author'
     id = Column(Integer, primary_key=True)
-    name = Column(String)
+    name = Column(String(128))
     contents = relationship('Content', back_populates='author')
 
 
@@ -101,7 +102,7 @@ class Category(Base):
 
     __tablename__ = 'category'
     id = Column(Integer, primary_key=True)
-    name = Column(String)
+    name = Column(String(128))
     sources = relationship(
         'Source',
         back_populates='categories',
@@ -127,7 +128,7 @@ class Tag(Base):
 
     __tablename__ = 'tag'
     id = Column(Integer, primary_key=True)
-    name = Column(String)
+    name = Column(String(128))
     sources = relationship(
         'Source',
         back_populates='tags',
@@ -165,8 +166,8 @@ class Content(Base):
     """
 
     __tablename__ = 'content'
-    id = Column(String, primary_key=True, doc='Content ID')
-    title = Column(String)
+    id = Column(Integer, primary_key=True, doc='Content ID')
+    title = Column(String(255))
     created_date = Column(
         DateTime,
         nullable=False,
@@ -181,13 +182,13 @@ class Content(Base):
         DateTime,
         doc='Date of the last database entry update.'
     )
-    url = Column(String)
+    url = Column(String(2083), unique=True)
     author_id = Column(Integer, ForeignKey(Author.id))
     author = relationship('Author', back_populates='contents')
     score = Column(Integer, doc='User content score')
     predicted_score = Column(Float)
     predicted_certainty = Column(Float)
-    type = Column(Integer, doc='Content type discriminator')
+    type = Column(String(255), doc='Content type discriminator')
     categories = relationship(
         'Category',
         back_populates='contents',
@@ -220,10 +221,10 @@ class Article(Content):
     """
 
     __tablename__ = 'article'
-    id = Column(String, ForeignKey('content.id'), primary_key=True)
-    summary = Column(String)
-    image_path = Column(String)
-    body = Column(String)
+    id = Column(Integer, ForeignKey('content.id'), primary_key=True)
+    summary = Column(Text)
+    image_path = Column(String(2083))
+    body = Column(Text)
     source_id = Column(Integer, ForeignKey('rss_source.id'))
     source = relationship('RssSource', back_populates='articles')
 
@@ -237,7 +238,7 @@ class Source(Base):
     Class to define the sources model.
 
     Public attributes:
-        id (str): Content id.
+        id (str): Source id.
         title (str):
         description (str):
         created_date (Datetime): Date of introduction to the database.
@@ -245,7 +246,7 @@ class Source(Base):
         url (str):
         aggregated_certainty (float):
         aggregated_score (float):
-        type(str): Content type discriminator.
+        type(str): Source type discriminator.
 
     Relations:
         categories(list): List of Category related objects.
@@ -254,8 +255,8 @@ class Source(Base):
 
     __tablename__ = 'source'
     id = Column(Integer, primary_key=True, doc='Source ID')
-    title = Column(String)
-    description = Column(String)
+    title = Column(String(255))
+    description = Column(String(255))
     created_date = Column(
         DateTime,
         nullable=False,
@@ -269,7 +270,7 @@ class Source(Base):
         DateTime,
         doc='Date of the last time the source was fetched.'
     )
-    url = Column(String, unique=True)
+    url = Column(String(2083), unique=True)
     aggregated_score = Column(Float)
     aggregated_certainty = Column(Float)
     categories = relationship(
@@ -282,7 +283,7 @@ class Source(Base):
         back_populates='sources',
         secondary=source_has_tag,
     )
-    type = Column(Integer, doc='Content type discriminator')
+    type = Column(String(255), doc='Content type discriminator')
 
     __mapper_args__ = {
         'polymorphic_identity': 'source',
@@ -302,8 +303,8 @@ class RssSource(Source):
     """
 
     __tablename__ = 'rss_source'
-    id = Column(String, ForeignKey('source.id'), primary_key=True)
-    image_path = Column(String)
+    id = Column(Integer, ForeignKey('source.id'), primary_key=True)
+    image_path = Column(String(2083))
     articles = relationship('Article', back_populates='source')
 
     __mapper_args__ = {

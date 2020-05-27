@@ -74,7 +74,7 @@ class ContentFactory(factory.alchemy.SQLAlchemyModelFactory):
     """
     Class to generate a fake content element.
     """
-    id = factory.Faker('word')
+    id = factory.Sequence(lambda n: n)
     title = factory.Faker('sentence')
     published_date = factory.Faker('date_time')
     created_date = factory.Faker('date_time')

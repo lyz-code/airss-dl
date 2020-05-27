@@ -43,10 +43,18 @@ setup(
     entry_points={
         'console_scripts': ['airss-dl = airss_dl:main']
     },
+    setup_requires=[
+        "alembic>=1.4.2",
+        "argcomplete>=1.11.1",
+        "feedparser>=5.2.1",
+        "pymysql>=0.9.3",
+        "SQLAlchemy>=1.3.15"
+    ],
     install_requires=[
         "alembic>=1.4.2",
         "argcomplete>=1.11.1",
         "feedparser>=5.2.1",
+        "pymysql>=0.9.3",
         "SQLAlchemy>=1.3.15"
     ]
 )
